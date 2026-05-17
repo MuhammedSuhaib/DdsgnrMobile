@@ -3,7 +3,6 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet, KeyboardAvoidingVi
 import { useRouter } from 'expo-router';
 import { useAuth } from '../../context/AuthContext';
 import { Colors } from '../../lib/theme';
-import Header from '../../components/Header';
 
 export default function Signup() {
   const [fullName, setFullName] = useState('');
@@ -32,8 +31,8 @@ export default function Signup() {
 
     setIsLoading(true);
     try {
-      await signUp(email, password);
-      router.replace('/');
+      await signUp(email, fullName);
+      router.replace('/(tabs)');
     } catch (error) {
       Alert.alert('Signup Failed', (error as Error).message);
     } finally {
@@ -43,8 +42,8 @@ export default function Signup() {
 
   return (
     <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.container}>
-      <Header />
       <View style={styles.formContainer}>
+        <Text style={styles.logo}>Ddsgnr</Text>
         <Text style={styles.title}>Create Account</Text>
         <TextInput 
             placeholder="Full Name" 
@@ -97,7 +96,8 @@ export default function Signup() {
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: Colors.background },
   formContainer: { flex: 1, padding: 24, justifyContent: 'center' },
-  title: { fontSize: 32, color: Colors.white, marginBottom: 24, fontWeight: 'bold' },
+  logo: { fontSize: 32, fontWeight: 'bold', color: Colors.primary, marginBottom: 8, textAlign: 'center' },
+  title: { fontSize: 24, color: Colors.white, marginBottom: 32, fontWeight: 'bold', textAlign: 'center' },
   input: { backgroundColor: 'rgba(255, 255, 255, 0.05)', borderWidth: 1, borderColor: Colors.border, padding: 16, marginBottom: 16, borderRadius: 8, color: Colors.white },
   button: { backgroundColor: Colors.primary, padding: 16, borderRadius: 8, alignItems: 'center' },
   buttonText: { fontWeight: 'bold', color: Colors.dark },

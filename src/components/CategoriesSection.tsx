@@ -1,6 +1,8 @@
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, FlatList, Dimensions } from 'react-native';
 import { Colors } from '../lib/theme';
 import { categories } from '../lib/data';
+
+const { width } = Dimensions.get('window');
 
 export default function CategoriesSection() {
   return (
@@ -8,69 +10,66 @@ export default function CategoriesSection() {
       <Text style={styles.header}>Explore Top Categories</Text>
       <Text style={styles.description}>Dive into specialized paths curated by industry veterans.</Text>
       
-      <View style={styles.grid}>
-        {categories.map((cat, index) => (
-          <TouchableOpacity key={index} style={styles.card} activeOpacity={0.7} accessibilityRole="button">
-            <Text style={styles.cardTitle}>{cat.title}</Text>
-            <Text style={styles.cardSubtitle}>{cat.courses}</Text>
+      <FlatList
+        data={categories}
+        keyExtractor={(item, index) => index.toString()}
+        renderItem={({ item }) => (
+          <TouchableOpacity style={styles.card} activeOpacity={0.7}>
+            <Text style={styles.cardTitle}>{item.title}</Text>
+            <Text style={styles.cardSubtitle}>{item.courses}</Text>
           </TouchableOpacity>
-        ))}
-      </View>
-
-      <TouchableOpacity style={styles.button} activeOpacity={0.8} accessibilityRole="button">
-        <Text style={styles.buttonText}>View All Categories</Text>
-      </TouchableOpacity>
+        )}
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        pagingEnabled
+        snapToAlignment="center"
+        decelerationRate="fast"
+        contentContainerStyle={styles.listContainer}
+        ItemSeparatorComponent={() => <View style={{ width: 16 }} />}
+      />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    padding: 24,
+    paddingVertical: 24,
     backgroundColor: Colors.background,
   },
   header: {
     color: Colors.white,
-    fontSize: 36,
+    fontSize: 28,
     fontWeight: 'bold',
-    marginBottom: 16,
-    lineHeight: 42,
+    marginBottom: 8,
+    paddingHorizontal: 24,
   },
   description: {
     color: Colors.gray,
-    fontSize: 18,
-    marginBottom: 40,
-    lineHeight: 26,
+    fontSize: 16,
+    marginBottom: 24,
+    paddingHorizontal: 24,
   },
-  grid: {
-    gap: 16,
+  listContainer: {
+    paddingHorizontal: 24,
   },
   card: {
-    backgroundColor: Colors.grayLight,
-    padding: 24,
+    backgroundColor: '#1a1a1a',
+    padding: 20,
     borderRadius: 8,
+    borderWidth: 1,
+    borderColor: Colors.border,
+    width: width * 0.7,
+    height: 120,
+    justifyContent: 'center',
   },
   cardTitle: {
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: 'bold',
-    color: Colors.dark,
-    marginBottom: 8,
+    color: Colors.white,
+    marginBottom: 4,
   },
   cardSubtitle: {
     fontSize: 14,
-    color: '#666',
-  },
-  button: {
-    marginTop: 40,
-    paddingVertical: 16,
-    borderWidth: 2,
-    borderColor: Colors.white,
-    borderRadius: 8,
-    alignItems: 'center',
-  },
-  buttonText: {
-    color: Colors.white,
-    fontWeight: 'bold',
-    fontSize: 16,
+    color: Colors.gray,
   },
 });

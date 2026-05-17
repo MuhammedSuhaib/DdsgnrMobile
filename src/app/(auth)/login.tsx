@@ -3,7 +3,6 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet, KeyboardAvoidingVi
 import { useRouter } from 'expo-router';
 import { useAuth } from '../../context/AuthContext';
 import { Colors } from '../../lib/theme';
-import Header from '../../components/Header';
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -20,8 +19,9 @@ export default function Login() {
 
     setIsLoading(true);
     try {
-      await signIn(email, password);
-      router.replace('/');
+      // Assuming a name exists or using a default for login
+      await signIn(email, "Student"); 
+      router.replace('/(tabs)');
     } catch (error) {
       Alert.alert('Login Failed', (error as Error).message);
     } finally {
@@ -31,8 +31,8 @@ export default function Login() {
 
   return (
     <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.container}>
-      <Header />
       <View style={styles.formContainer}>
+        <Text style={styles.logo}>Ddsgnr</Text>
         <Text style={styles.title}>Welcome Back</Text>
         <TextInput 
             placeholder="Email" 
@@ -69,7 +69,8 @@ export default function Login() {
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: Colors.background },
   formContainer: { flex: 1, padding: 24, justifyContent: 'center' },
-  title: { fontSize: 32, color: Colors.white, marginBottom: 24, fontWeight: 'bold' },
+  logo: { fontSize: 32, fontWeight: 'bold', color: Colors.primary, marginBottom: 8, textAlign: 'center' },
+  title: { fontSize: 24, color: Colors.white, marginBottom: 32, fontWeight: 'bold', textAlign: 'center' },
   input: { backgroundColor: 'rgba(255, 255, 255, 0.05)', borderWidth: 1, borderColor: Colors.border, padding: 16, marginBottom: 16, borderRadius: 8, color: Colors.white },
   button: { backgroundColor: Colors.primary, padding: 16, borderRadius: 8, alignItems: 'center' },
   buttonText: { fontWeight: 'bold', color: Colors.dark },

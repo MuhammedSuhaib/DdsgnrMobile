@@ -2,52 +2,59 @@ import { createContext, useContext, useEffect, useState, ReactNode } from "react
 import * as SecureStore from "expo-secure-store";
 import { Platform } from "react-native";
 
+interface UserData {
+  email: string;
+  name: string;
+}
+
 interface AuthContextType {
-  user: string | null;
-  signIn: (email: string) => Promise<void>;
-  signUp: (email: string) => Promise<void>;
+  user: UserData | null;
+  signIn: (email: string, name: string) => Promise<void>;
+  signUp: (email: string, name: string) => Promise<void>;
   signOut: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [user, setUser] = useState<string | null>(null);
+  const [user, setUser] = useState<UserData | null>(null);
 
   useEffect(() => {
-    // Web does not support SecureStore directly without polyfills or is not suitable for storage.
-    // For web development, we use localStorage as a fallback.
-    if (Platform.OS === 'web') {
-      const stored = localStorage.getItem("user");
-      setUser(stored);
-    } else {
-      SecureStore.getItemAsync("user").then((stored) => {
-        if (stored) setUser(stored);
-      });
-    }
+    const loadUser = async () => {
+      if (Platform.OS === 'web') {
+        const stored = localStorage.getItem("user");
+        if (stored) setUser(JSON.parse(stored));
+      } else {
+        const stored = await SecureStore.getItemAsync("user");
+        if (stored) setUser(JSON.parse(stored));
+      }
+    };
+    loadUser();
   }, []);
 
-  const signIn = async (email: string) => {
+  const signIn = async (email: string, name: string) => {
+    const userData = { email, name };
     if (Platform.OS === 'web') {
-      localStorage.setItem("user", email);
+      localStorage.setItem("user", JSON.stringify(userData));
     } else {
-      await SecureStore.setItemAsync("user", email);
+      await SecureStore.setItemAsync("user", JSON.stringify(userData));
     }
-    setUser(email);
+    setUser(userData);
   };
 
-  const signUp = async (email: string) => {
+  const signUp = async (email: string, name: string) => {
+    const userData = { email, name };
     if (Platform.OS === 'web') {
-      localStorage.setItem("user", email);
+      localStorage.setItem("user", JSON.stringify(userData));
     } else {
-      await SecureStore.setItemAsync("user", email);
+      await SecureStore.setItemAsync("user", JSON.stringify(userData));
     }
-    setUser(email);
+    setUser(userData);
   };
 
   const signOut = async () => {
     if (Platform.OS === 'web') {
-      localStorage.removeItem("user");
+      localStorage.clear();
     } else {
       await SecureStore.deleteItemAsync("user");
     }
