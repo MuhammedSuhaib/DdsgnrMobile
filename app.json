@@ -4,30 +4,22 @@
     "slug": "ddsgnr-mobile",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./src/assets/icon.png",
     "userInterfaceStyle": "dark",
     "newArchEnabled": true,
-    "splash": {
-      "image": "./src/assets/splash-icon.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#0a0a0a"
-    },
-    "ios": {
-      "supportsTablet": true
-    },
     "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./src/assets/adaptive-icon.png",
-        "backgroundColor": "#0a0a0a"
-      },
       "edgeToEdgeEnabled": true,
       "package": "com.ddsgnr.app"
     },
-    "web": {
-      "favicon": "./src/assets/favicon.png"
-    },
     "plugins": [
       "expo-secure-store"
-    ]
+    ],
+    "eas": {
+      "projectId": "dc46833b-7799-4cb7-8dfe-c48cf88a2687"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "dc46833b-7799-4cb7-8dfe-c48cf88a2687"
+      }
+    }
   }
 }
